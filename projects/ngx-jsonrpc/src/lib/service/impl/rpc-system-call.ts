@@ -1,11 +1,7 @@
-# NgxJsonrpc
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Rpcimplement } from '../dec';
 
-This is a client for jsonrpc using HttpClient and WebSocket only.
-
-
-### Create jsonrpc client with decorator
-
-```
 @Rpcimplement('system', 'system')
 @Injectable()
 export class RPCSystemCall {
@@ -19,6 +15,3 @@ export class RPCSystemCall {
     return null;
   }
 }
-```
-
-

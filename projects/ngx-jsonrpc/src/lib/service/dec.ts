@@ -1,0 +1,39 @@
+import { getAllMethods } from './utility-reflection';
+import { RPCClient } from './jsonrpc-client';
+import { RPCClientSocket } from './jsonrpc-client-ws';
+import { RPCClientSettings } from './jsonrpc-settings';
+
+export function Rpcimplement(namespace: string, subnamespace: string) {
+  return cls => {
+    const methods = getAllMethods(cls.prototype) as string[];
+    methods.forEach(value => {
+      console.log('DEFINING ', value);
+      Object.defineProperty(cls.prototype, value, {
+        value(...args: any) {
+          const client = RPCClientSettings.injector.get(RPCClient);
+          client.SetNamespace(namespace);
+          return client.ExecuteCall(subnamespace + '.' + value, args);
+        }
+      });
+    });
+  };
+}
+
+export function WSRPC(namespace: string, subnamespace: string) {
+  return cls => {
+    const methods = getAllMethods(cls.prototype) as string[];
+    let client = null;
+    methods.forEach(value => {
+      Object.defineProperty(cls.prototype, value, {
+        value() {
+          if (client === null) {
+            client = RPCClientSettings.injector.get(RPCClientSocket);
+          }
+          return client.getEventSubject(
+            namespace + '.' + subnamespace + '.' + value
+          );
+        }
+      });
+    });
+  };
+}
