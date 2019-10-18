@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { RPCCall } from './rpc-call';
 import { RPCClientSettings } from './jsonrpc-settings';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class RPCClient {
@@ -23,18 +24,18 @@ export class RPCClient {
     this.headers = new HttpHeaders({ 'X-dm-namespace': ns });
   }
 
-  ExecuteCall(method: string, args: any[]): Observable<any> {
+  ExecuteCall(method: string, arg: any): Observable<any> {
     const rpcCall = {
       jsonrpc: '2.0',
       id: 'qwer',
       method,
-      params: args == null || args === undefined ? [] : args
+      params: !arg ? {} : arg
     } as RPCCall;
     this.lastCall = rpcCall;
+    console.log(this.lastCall);
     return this.http.post<RPCCall>(this.getRPCEndpoint(), rpcCall, { headers: this.headers }).pipe(
       map(x => {
         if (x.error != null || x.error !== undefined) {
-          console.log('THERE IS AN ERROR ', x.error);
           throw new Error(x.error);
         }
         return x.result;

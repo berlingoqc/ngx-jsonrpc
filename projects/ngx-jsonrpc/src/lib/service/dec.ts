@@ -1,7 +1,7 @@
-import { getAllMethods } from './utility-reflection';
 import { RPCClient } from './jsonrpc-client';
-import { RPCClientSocket } from './jsonrpc-client-ws';
 import { RPCClientSettings } from './jsonrpc-settings';
+import { RPCClientSocket } from './jsonrpc-client-ws';
+import { getAllMethods } from './utility-reflection';
 
 export function Rpcimplement(namespace: string, subnamespace: string) {
   return cls => {
@@ -9,10 +9,10 @@ export function Rpcimplement(namespace: string, subnamespace: string) {
     methods.forEach(value => {
       console.log('DEFINING ', value);
       Object.defineProperty(cls.prototype, value, {
-        value(...args: any) {
+        value(arg: any) {
           const client = RPCClientSettings.injector.get(RPCClient);
           client.SetNamespace(namespace);
-          return client.ExecuteCall(subnamespace + '.' + value, args);
+          return client.ExecuteCall(subnamespace + '.' + value, arg);
         }
       });
     });
