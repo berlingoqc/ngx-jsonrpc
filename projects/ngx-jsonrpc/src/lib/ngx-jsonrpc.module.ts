@@ -1,5 +1,7 @@
 import { NgModule, Injector } from '@angular/core';
-import { RPCClient, RPCClientSocket, RPCClientSettings } from './service';
+import { RPCClient } from './service/jsonrpc-client';
+import { RPCClientSocket } from './service/jsonrpc-client-ws';
+import { RPCClientSettings} from './service/jsonrpc-settings';
 
 @NgModule({
   declarations: [],
