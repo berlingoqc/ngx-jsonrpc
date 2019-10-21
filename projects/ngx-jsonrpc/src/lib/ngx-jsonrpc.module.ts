@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { RPCClient, RPCClientSocket, RPCClientSettings } from './service';
 
 @NgModule({
@@ -7,4 +7,9 @@ import { RPCClient, RPCClientSocket, RPCClientSettings } from './service';
   exports: [],
   providers: [RPCClient, RPCClientSocket, RPCClientSettings ]
 })
-export class NgxJsonrpcModule { }
+export class NgxJsonrpcModule {
+
+    constructor(injector: Injector) {
+        RPCClientSettings.injector = injector;
+    }
+}
