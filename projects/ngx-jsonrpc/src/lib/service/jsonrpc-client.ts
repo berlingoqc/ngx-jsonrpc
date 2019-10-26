@@ -29,14 +29,14 @@ export class RPCClient {
       jsonrpc: '2.0',
       id: 'qwer',
       method,
-      params: !arg ? {} : arg
+      params: arg
     } as RPCCall;
     this.lastCall = rpcCall;
     console.log(this.lastCall);
     return this.http.post<RPCCall>(this.getRPCEndpoint(), rpcCall, { headers: this.headers }).pipe(
       map(x => {
-        if (x.error != null || x.error !== undefined) {
-          throw new Error(x.error);
+        if (x.error) {
+          throw new Error(JSON.stringify(x.error));
         }
         return x.result;
       })

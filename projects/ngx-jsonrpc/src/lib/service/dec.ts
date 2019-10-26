@@ -3,14 +3,18 @@ import { RPCClientSettings } from './jsonrpc-settings';
 import { RPCClientSocket } from './jsonrpc-client-ws';
 import { getAllMethods } from './utility-reflection';
 
-export function Rpcimplement(namespace: string, subnamespace: string) {
+export function Rpcimplement(namespace: string, subnamespace: string, noEmptyArray = true) {
   return cls => {
     const methods = getAllMethods(cls.prototype) as string[];
     methods.forEach(value => {
       console.log('DEFINING ', value);
       Object.defineProperty(cls.prototype, value, {
-        value(arg: any) {
+        value(...arg: any[]) {
           const client = RPCClientSettings.injector.get(RPCClient);
+          if (arg.length === 1) {
+            console.log('1 size item');
+            arg = arg[0];
+          }
           client.SetNamespace(namespace);
           return client.ExecuteCall(subnamespace + '.' + value, arg);
         }
