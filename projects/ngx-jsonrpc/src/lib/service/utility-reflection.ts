@@ -7,8 +7,6 @@ export const getAllMethods = (obj): string[] => {
       .sort()
       .filter(
         (p, i, arr) => typeof obj[p] === 'function' && p !== 'constructor' // only the methods //&&           //not the constructor
-        // (i == 0 || p !== arr[i - 1]) &&  //not overriding in this prototype
-        // props.indexOf(p) === -1          //not overridden in a child
       );
     props = props.concat(l);
   } while (

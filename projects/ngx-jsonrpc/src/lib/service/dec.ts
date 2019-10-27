@@ -7,12 +7,10 @@ export function Rpcimplement(namespace: string, subnamespace: string, noEmptyArr
   return cls => {
     const methods = getAllMethods(cls.prototype) as string[];
     methods.forEach(value => {
-      console.log('DEFINING ', value);
       Object.defineProperty(cls.prototype, value, {
         value(...arg: any[]) {
           const client = RPCClientSettings.injector.get(RPCClient);
           if (arg.length === 1) {
-            console.log('1 size item');
             arg = arg[0];
           }
           client.SetNamespace(namespace);

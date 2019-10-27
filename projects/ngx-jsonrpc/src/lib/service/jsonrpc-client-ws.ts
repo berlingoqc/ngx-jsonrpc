@@ -1,6 +1,7 @@
-import { RPCCall } from './rpc-call';
+import { Subject, Subscription } from 'rxjs';
+
 import { Injectable } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { RPCCall } from './rpc-call';
 import { RPCClientSettings } from './jsonrpc-settings';
 import { webSocket } from 'rxjs/webSocket';
 
@@ -35,7 +36,6 @@ export class RPCClientSocket {
   getEventSubject(ressource: string): Subject<any> {
     let data = this.subjects.get(ressource);
     if (data === undefined) {
-      console.log('CREATING subject for ', ressource);
       data = new Subject();
       this.subjects.set(ressource, data);
     }
@@ -102,7 +102,6 @@ export class RPCClientSocket {
   }
 
   private handlerError(error: any) {
-    console.log('ERROR ', error);
     this.connected = false;
   }
 }
